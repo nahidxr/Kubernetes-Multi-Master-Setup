@@ -25,6 +25,7 @@ This guide outlines the steps to set up a high-availability Kubernetes multi-mas
 - A working **Kubernetes cluster setup** with `kubeadm` and **Calico** as the network provider.
 - Ensure all nodes can resolve each other via internal hostnames.
 
+## Configurations
 ```bash
 On HAProxy Node 1 (LB1):
 $ hostnamectl set-hostname LB1
