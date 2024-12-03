@@ -25,6 +25,7 @@ This guide outlines the steps to set up a high-availability Kubernetes multi-mas
 - A working **Kubernetes cluster setup** with `kubeadm` and **Calico** as the network provider.
 - Ensure all nodes can resolve each other via internal hostnames.
 
+## Configurations
 ```bash
 On HAProxy Node 1 (LB1):
 $ hostnamectl set-hostname LB1
@@ -179,4 +180,10 @@ On the first master node, run the following kubeadm command to initialize the Ku
 
 
 $ kubeadm init --control-plane-endpoint="192.168.5.224:6443" --upload-certs --apiserver-advertise-address=192.168.5.20 --pod-network-cidr=192.168.0.0/16
+
+```
+
+## Snapshots
+
+![GCP Dashboard](./snapshots/Screenshot_1.png)  
 
