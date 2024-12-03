@@ -183,10 +183,10 @@ $ sudo systemctl status haproxy
 Kubernetes Master Initialization
 On the first master node, run the following kubeadm command to initialize the Kubernetes control plane:
 
-
-$ kubeadm init --control-plane-endpoint="192.168.5.224:6443" --upload-certs --apiserver-advertise-address=192.168.5.20 --pod-network-cidr=192.168.0.0/16
+```
+## $ kubeadm init --control-plane-endpoint="192.168.5.224:6443" --upload-certs --apiserver-advertise-address=192.168.5.20 --pod-network-cidr=192.168.0.0/16
 here is the command output,
-
+```bash
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
