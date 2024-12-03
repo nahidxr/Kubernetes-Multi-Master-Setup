@@ -24,6 +24,11 @@ This guide outlines the steps to set up a high-availability Kubernetes multi-mas
 - All nodes should have **Ubuntu 22.04** installed.
 - A working **Kubernetes cluster setup** with `kubeadm` and **Calico** as the network provider.
 - Ensure all nodes can resolve each other via internal hostnames.
+## Architecture Diagram
+
+![snapshot](./Snapshots/kubeadm-ha-topology-external-etcd.jpg)  
+
+Reference: https://kubernetes.io/docs/setup/independent/ha-topology/#stacked-etcd-topology
 
 ## Configurations
 ```bash
@@ -178,12 +183,40 @@ $ sudo systemctl status haproxy
 Kubernetes Master Initialization
 On the first master node, run the following kubeadm command to initialize the Kubernetes control plane:
 
+```
+## $ kubeadm init --control-plane-endpoint="192.168.5.224:6443" --upload-certs --apiserver-advertise-address=192.168.5.20 --pod-network-cidr=192.168.0.0/16
+here is the command output,
+```bash
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-$ kubeadm init --control-plane-endpoint="192.168.5.224:6443" --upload-certs --apiserver-advertise-address=192.168.5.20 --pod-network-cidr=192.168.0.0/16
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+You can now join any number of the control-plane node running the following command on each as root:
+
+  kubeadm join 192.168.5.224:6443 --token yat1p5.vc076t7pqwefb6vk \
+        --discovery-token-ca-cert-hash sha256:a4987cece284bca3858bc74b96602a6e5aed47653c003ece9e82a77c4fb88aee \
+        --control-plane --certificate-key b2e6c1e8cd5cbf9384b792ec6f539b87ef4740839772c5bccbaeabacc99b3418
+
+Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
+As a safeguard, uploaded-certs will be deleted in two hours; If necessary, you can use
+"kubeadm init phase upload-certs --upload-certs" to reload certs afterward.
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 192.168.5.224:6443 --token yat1p5.vc076t7pqwefb6vk \
+        --discovery-token-ca-cert-hash sha256:a4987cece284bca3858bc74b96602a6e5aed47653c003ece9e82a77c4fb88aee
 
 ```
 
 ## Snapshots
 
-![GCP Dashboard](./snapshots/Screenshot_1.png)  
+![snapshot](./Snapshots/Screenshot_1.png)  
 
