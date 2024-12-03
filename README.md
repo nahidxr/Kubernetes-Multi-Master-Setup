@@ -28,49 +28,50 @@ This guide outlines the steps to set up a high-availability Kubernetes multi-mas
 ## IP & Hostname Setup on Ubuntu Machines
 
 ```bash
- On HAProxy Node 1 (LB1):
+On HAProxy Node 1 (LB1):
 $ hostnamectl set-hostname LB1
+
 On HAProxy Node 2 (LB2):
-
 $ hostnamectl set-hostname LB2
+
 On Kubernetes Master Node 1 (kube-master1):
-
 $ hostnamectl set-hostname kube-master1
+
 On Kubernetes Master Node 2 (kube-master2):
-
 $ hostnamectl set-hostname kube-master2
+
 On Kubernetes Master Node 3 (kube-master3):
-
 $ hostnamectl set-hostname kube-master3
+
 Update /etc/hosts on all nodes:
-
 $ sudo vim /etc/hosts
+
 Add the following entries for all nodes in the cluster:
-
-
 192.168.5.220 kube-master1
 192.168.5.221 kube-master2
 192.168.5.227 kube-master3
 192.168.5.224 LB1
 192.168.5.225 LB2
+
 System Update on All Nodes
 Update and upgrade the system packages:
 
 $ sudo apt update && sudo apt upgrade -y
+
 Install HAProxy & Keepalived on Both Load Balancers
+
 Install HAProxy:
-
 $ sudo apt-get install haproxy -y
-Install Keepalived:
 
+Install Keepalived:
 $ sudo apt-get install keepalived -y
+
 Configure HAProxy
 Edit the HAProxy Configuration File (/etc/haproxy/haproxy.cfg):
-
-
 $ sudo vim /etc/haproxy/haproxy.cfg
-Add the following configuration to load balance traffic to the Kubernetes master nodes:
 
+
+Add the following configuration to load balance traffic to the Kubernetes master nodes:
 global
     log /dev/log local0 warning
     chroot /var/lib/haproxy
@@ -102,16 +103,18 @@ backend kubernetes-master-nodes
     server kubemaster1 192.168.5.220:6443 check fall 3 rise 2
     server kubemaster2 192.168.5.221:6443 check fall 3 rise 2
     server kubemaster3 192.168.5.227:6443 check fall 3 rise 2
+
 Start and Enable HAProxy
+
 Start HAProxy:
-
 $ sudo systemctl start haproxy
+
 Enable HAProxy to start on boot:
-
 $ sudo systemctl enable haproxy
-Restart HAProxy (if necessary):
 
+Restart HAProxy (if necessary):
 $ sudo systemctl restart haproxy
+
 Configure Keepalived
 Edit Keepalived Configuration File (/etc/keepalived/keepalived.conf):
 
@@ -149,16 +152,17 @@ vrrp_instance VI_1 {
         chk_haproxy
     }
 }
+
 Start and Enable Keepalived
 Start Keepalived:
-
 $ sudo systemctl start keepalived
+
 Enable Keepalived to start on boot:
-
 $ sudo systemctl enable keepalived
-Restart Keepalived (if necessary):
 
+Restart Keepalived (if necessary):
 $ sudo systemctl restart keepalived
+
 Verify VIP Status
 Verify the virtual IP (VIP) is up:
 
@@ -169,6 +173,7 @@ If the VIP is down or not assigned correctly, check the status of Keepalived and
 
 $ sudo systemctl status keepalived
 $ sudo systemctl status haproxy
+
 Kubernetes Master Initialization
 On the first master node, run the following kubeadm command to initialize the Kubernetes control plane:
 
