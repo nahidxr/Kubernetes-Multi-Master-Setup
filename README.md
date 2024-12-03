@@ -153,6 +153,8 @@ vrrp_instance VI_1 {
     }
 }
 
+Note: Interface will be based on IP address interface. Priority will be different in both proxy server(ex:100,120). Virtual ip is free ip address which is not use in anywhere.
+
 Start and Enable Keepalived
 Start Keepalived:
 $ sudo systemctl start keepalived
