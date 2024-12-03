@@ -185,5 +185,5 @@ $ kubeadm init --control-plane-endpoint="192.168.5.224:6443" --upload-certs --ap
 
 ## Snapshots
 
-![GCP Dashboard](./snapshots/Screenshot_1.png)  
+![snapshot](./snapshots/Screenshot_1.png)  
 
