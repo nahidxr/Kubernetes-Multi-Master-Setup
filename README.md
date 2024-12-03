@@ -24,6 +24,11 @@ This guide outlines the steps to set up a high-availability Kubernetes multi-mas
 - All nodes should have **Ubuntu 22.04** installed.
 - A working **Kubernetes cluster setup** with `kubeadm` and **Calico** as the network provider.
 - Ensure all nodes can resolve each other via internal hostnames.
+## Architecture Diagram
+
+![snapshot](./Snapshots/kubeadm-ha-topology-external-etcd.jpg)  
+
+Reference: https://kubernetes.io/docs/setup/independent/ha-topology/#stacked-etcd-topology
 
 ## Configurations
 ```bash
@@ -185,5 +190,5 @@ $ kubeadm init --control-plane-endpoint="192.168.5.224:6443" --upload-certs --ap
 
 ## Snapshots
 
-![snapshot](./snapshots/Screenshot_1.png)  
+![snapshot](./Snapshots/Screenshot_1.png)  
 
